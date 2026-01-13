@@ -35,11 +35,11 @@
       };
 
       deploy.nodes = {
-        my-node = {
+        damogran = {
           hostname = "46.224.43.253";
           fastConnection = false;
           profiles = {
-            my-profile = {
+            nexus = {
               sshUser = "admin";
               path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hetzner;
               user = "root";
