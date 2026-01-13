@@ -32,6 +32,7 @@
           common
           admin
           hardware-hetzner
+          pangolin
           # docker
         ];
       };

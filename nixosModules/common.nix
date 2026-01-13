@@ -12,6 +12,10 @@
   };
   system.stateVersion = "22.11";
 
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
+
   nix = {
     # Modern nix releases enable flakes, so the regular nix package is enough
     package = pkgs.nix;
