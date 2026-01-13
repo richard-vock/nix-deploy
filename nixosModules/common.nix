@@ -29,6 +29,10 @@
     generateRegistryFromInputs = true;
   };
 
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.age.generateKey = true;
+
   # Set the system revision to the flake revision
   # You can query this value with: $ nix-info -m
   system.configurationRevision = (if inputs.self ? rev then inputs.self.rev else null);

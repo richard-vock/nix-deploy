@@ -8,6 +8,7 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs =
@@ -27,6 +28,7 @@
 
       hosts = {
         hetzner.modules = with nixosModules; [
+          inputs.sops-nix.nixosModules.sops
           common
           admin
           hardware-hetzner
