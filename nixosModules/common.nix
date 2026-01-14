@@ -23,8 +23,9 @@
   };
 
   sops.defaultSopsFile = ../secrets/secrets.yaml;
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.age.generateKey = true;
+  sops.age.keyFile = "/var/lib/sops-nix/deploy.age";
+  sops.age.sshKeyPaths = [ ];
+  sops.age.generateKey = false;
 
   # Set the system revision to the flake revision
   # You can query this value with: $ nix-info -m

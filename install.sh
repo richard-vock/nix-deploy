@@ -7,6 +7,12 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# check if /var/lib/sops-nix/deploy.age exists
+if [ ! -f /var/lib/sops-nix/deploy.age ]; then
+  echo "Missing /var/lib/sops-nix/deploy.age file!"
+  exit 1
+fi
+
 BTRFS_OPTS="compress=zstd,noatime"
 MNT="/mnt"
 TARGET="/dev/sda"
@@ -45,6 +51,12 @@ mount -o "$BTRFS_OPTS,subvol=@swap" "${TARGET}2" "${MNT}"/swap
 mount -o "$BTRFS_OPTS,subvol=@boot" "${TARGET}2" "${MNT}"/boot
 
 findmnt -R --target "${MNT}"
+
+# copy age key to deployed system
+mkdir -p "${MNT}"/var/lib/sops-nix
+cp /var/lib/sops-nix/deploy.age "${MNT}"/var/lib/sops-nix/deploy.age
+chown root:root "${MNT}"/var/lib/sops-nix/deploy.age
+chmod 600 "${MNT}"/var/lib/sops-nix/deploy.age
 
 # .#hetzner is our hostname defined by our flake
 nix-shell -p nix -p git --run "nixos-install --root ${MNT} --flake .#hetzner"

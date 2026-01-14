@@ -1,9 +1,11 @@
 keys:
   - &richard age1n9gqf2zrypsskx09a0ym7ytcn00k9ngsp37ntl4lz6whx0fx0gjsdyfhgz
+  - &deploy age1d4manxx5lh06yntpx6zuey6k4y6jlff25v9xxf97v57tw2w2s9lq5f22ww
   - &damogran age1etf0k9yvukgqev5r9uf4acdj2626nv3p4g6sk372zfgl9ezs3vpsnzq3f6
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
       - age:
           - *richard
+          - *deploy
           - *damogran
