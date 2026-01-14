@@ -1,7 +1,5 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
-  # sops.secrets."pangolin/env".restartUnits = [ "pangolin.service" ];
-
   services.headscale = {
     enable = true;
 
@@ -117,6 +115,12 @@
     ];
     # If running a DERP server:
     #allowedUDPPorts = [ 3478 ];
+  };
+
+  # Allow headscale to bind to privileged ports for ACME HTTP challenges.
+  systemd.services.headscale.serviceConfig = {
+    AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+    CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
   };
 
   # Optional: Use with nginx reverse proxy for TLS termination
