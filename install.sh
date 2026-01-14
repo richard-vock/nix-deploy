@@ -59,5 +59,4 @@ chown root:root "${MNT}"/var/lib/sops-nix/deploy.age
 chmod 600 "${MNT}"/var/lib/sops-nix/deploy.age
 
 # .#hetzner is our hostname defined by our flake
-nix-shell -p nix -p git --run "nixos-install --root ${MNT} --flake .#hetzner"
-umount -R /mnt
+nix-shell -p nix -p git --run "nixos-install --root ${MNT} --flake .#hetzner" || umount -R /mnt
