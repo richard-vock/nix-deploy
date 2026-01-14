@@ -9,6 +9,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix.url = "github:Mic92/sops-nix";
+    # headscale.url = "github:juanfont/headscale";
   };
 
   outputs =
@@ -29,8 +30,10 @@
       hosts = {
         hetzner.modules = with nixosModules; [
           inputs.sops-nix.nixosModules.sops
+          # inputs.headscale.nixosModules.default
           common
           network
+          # headscale
           admin
           hardware-hetzner
           # pangolin
