@@ -26,5 +26,5 @@
     ];
   };
   # security.sudo.wheelNeedsPassword = false;
-  nix.trustedUsers = [ "@wheel" ]; # https://github.com/serokell/deploy-rs/issues/25
+  nix.settings."trusted-users" = [ "@wheel" ]; # https://github.com/serokell/deploy-rs/issues/25
 }
