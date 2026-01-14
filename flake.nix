@@ -43,7 +43,7 @@
 
       deploy.nodes = {
         damogran = {
-          hostname = "46.224.43.253";
+          hostname = "damogran";
           fastConnection = false;
           profiles = {
             nexus = {
