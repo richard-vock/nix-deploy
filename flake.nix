@@ -30,6 +30,7 @@
         hetzner.modules = with nixosModules; [
           inputs.sops-nix.nixosModules.sops
           common
+          network
           admin
           hardware-hetzner
           pangolin

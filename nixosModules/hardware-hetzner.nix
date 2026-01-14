@@ -1,4 +1,9 @@
-{ config, pkgs, modulesPath, ... }:
+{
+  config,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   networking = {
@@ -13,7 +18,7 @@
 
     networks."40-wired" = {
       matchConfig.Name = "en*";
-      networkConfig.DHCP = "ipv4";
+      networkConfig.DHCP = "yes";
       linkConfig.RequiredForOnline = true;
     };
   };
@@ -24,7 +29,13 @@
 
   boot = {
     initrd = {
-      availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "sd_mod" "sr_mod" ];
+      availableKernelModules = [
+        "ahci"
+        "xhci_pci"
+        "virtio_pci"
+        "sd_mod"
+        "sr_mod"
+      ];
       kernelModules = [ ];
     };
     kernelModules = [ ];
@@ -35,32 +46,44 @@
     };
   };
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-label/NIXOS";
-      fsType = "btrfs";
-      options = [ "subvol=@rootfs" "noatime" "compress=zstd" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/NIXOS";
+    fsType = "btrfs";
+    options = [
+      "subvol=@rootfs"
+      "noatime"
+      "compress=zstd"
+    ];
+  };
 
-  fileSystems."/nix" =
-    {
-      device = "/dev/disk/by-label/NIXOS";
-      fsType = "btrfs";
-      options = [ "subvol=@nix" "noatime" "compress=zstd" ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-label/NIXOS";
+    fsType = "btrfs";
+    options = [
+      "subvol=@nix"
+      "noatime"
+      "compress=zstd"
+    ];
+  };
 
-
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-label/NIXOS";
-      fsType = "btrfs";
-      options = [ "subvol=@boot" "noatime" "compress=zstd" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/NIXOS";
+    fsType = "btrfs";
+    options = [
+      "subvol=@boot"
+      "noatime"
+      "compress=zstd"
+    ];
+  };
 
   fileSystems."/swap" = {
     device = "/dev/disk/by-label/NIXOS";
     fsType = "btrfs";
-    options = [ "subvol=@swap" "noatime" "compress=zstd" ];
+    options = [
+      "subvol=@swap"
+      "noatime"
+      "compress=zstd"
+    ];
   };
 
   systemd.services = {
@@ -75,10 +98,12 @@
     };
   };
 
-  swapDevices = [{
-    device = "/swap/swapfile";
-    size = (1024 * 2);
-  }];
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+      size = (1024 * 2);
+    }
+  ];
 
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")

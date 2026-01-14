@@ -1,15 +1,30 @@
 { config, pkgs, ... }:
-
 {
+  sops.secrets."users/admin/id_ed25519_main_pub" = {
+    path = "/home/admin/.ssh/id_ed25519_main.pub";
+    owner = "admin";
+    group = "users";
+    mode = "0600";
+  };
+  sops.secrets."users/admin/id_ed25519_main" = {
+    path = "/home/admin/.ssh/id_ed25519_main";
+    owner = "admin";
+    group = "users";
+    mode = "0600";
+  };
+  sops.secrets."users/admin/pw" = {
+    neededForUsers = true;
+  };
+
   users.users.admin = {
     name = "admin";
-    initialPassword = "1234";
+    hashedPasswordFile = config.sops.secrets."users/admin/pw".path;
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHPBj2LARlTzFKHC0EohVEwQ+OctYSZkNGVwWdyhPOOWS/Ie9D/g5jZP9iym1SOVh4M/JHtpldeUIOJ2wcLvJkDC/Ijef4HYicBF86UGkWDLo+liYbKNRG+dOfncM4q51FuNjNz9j7W0tYxYBvVlkgB2+6G/Gp/ys9TMlcOvI22ChTetSRcmZ95KZdTDXoMe4NiyqddJE0GDNExPgvxbaNe7J2vmrh/heTlufFzu0W1PmTuMDNEq4whJ/DQEJbYOvXjK5qxlbu8Rl/j+zKJoj0bg9LPSAxloBEJ7VaGkmH2YxMHB7dijRNkuR28i8MvBFV4L6Jxi5PBVPk7yjuySD5 slim@hastromil-2013-06-11"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOipqKXXn3zmGmkXTucbZH3JDuJB+99G6hRByUuZvnk rvock@mailbox.org"
     ];
   };
-  security.sudo.wheelNeedsPassword = false;
+  # security.sudo.wheelNeedsPassword = false;
   nix.trustedUsers = [ "@wheel" ]; # https://github.com/serokell/deploy-rs/issues/25
 }
