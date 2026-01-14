@@ -25,6 +25,6 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBOipqKXXn3zmGmkXTucbZH3JDuJB+99G6hRByUuZvnk rvock@mailbox.org"
     ];
   };
-  # security.sudo.wheelNeedsPassword = false;
+  security.sudo.wheelNeedsPassword = false;
   nix.settings."trusted-users" = [ "@wheel" ]; # https://github.com/serokell/deploy-rs/issues/25
 }
