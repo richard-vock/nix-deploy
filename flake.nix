@@ -33,7 +33,7 @@
           network
           admin
           hardware-hetzner
-          pangolin
+          # pangolin
           # docker
         ];
       };
