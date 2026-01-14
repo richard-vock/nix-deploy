@@ -13,7 +13,7 @@
     port = 8080;
 
     settings = {
-      server_url = "https://net.damogran.cc";
+      server_url = "https://headscale.damogran.cc";
 
       # IP prefixes for the tailnet
       # These use the freeform settings - you can set any headscale config option
@@ -26,7 +26,7 @@
       # DNS configuration with MagicDNS
       dns = {
         magic_dns = true;
-        base_domain = "damogran.cc";
+        base_domain = "tailnet.damogran.cc";
 
         override_local_dns = true;
 
@@ -88,7 +88,7 @@
       # };
 
       # Optional: Let's Encrypt TLS certificates
-      tls_letsencrypt_hostname = "net.damogran.cc";
+      tls_letsencrypt_hostname = "headscale.damogran.cc";
       tls_letsencrypt_challenge_type = "HTTP-01";
 
       # Optional: Provide your own TLS certificates
@@ -96,10 +96,10 @@
       # tls_key_path = "/path/to/key.pem";
 
       # ACL policy configuration
-      policy = {
-        mode = "file";
-        path = "/var/lib/headscale/policy.hujson";
-      };
+      # policy = {
+      #   mode = "file";
+      #   path = "/var/lib/headscale/policy.hujson";
+      # };
 
       # You can add ANY headscale configuration option here thanks to freeform settings
       # For example, experimental features or settings not explicitly defined above:
@@ -110,9 +110,13 @@
 
   # Optional: Open firewall ports
   networking.firewall = {
-    allowedTCPPorts = [ 8080 ];
+    allowedTCPPorts = [
+      80
+      443
+      8080
+    ];
     # If running a DERP server:
-    # allowedUDPPorts = [ 3478 ];
+    #allowedUDPPorts = [ 3478 ];
   };
 
   # Optional: Use with nginx reverse proxy for TLS termination
