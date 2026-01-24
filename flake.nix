@@ -55,10 +55,10 @@
       outputsBuilder = (
         channels: {
           devShell = channels.nixpkgs.mkShell {
-            name = "my-deploy-shell";
+            name = "deploy-shell";
             buildInputs = with channels.nixpkgs; [
               nix
-              inputs.deploy-rs.packages.${system}.deploy-rs
+              inputs.deploy-rs.packages.${stdenv.hostPlatform.system}.deploy-rs
             ];
           };
         }
