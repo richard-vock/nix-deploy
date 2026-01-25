@@ -52,7 +52,7 @@
     domain = domain;
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 55522 ];
+      allowedTCPPorts = [ 80 443 55522 ];
       allowedUDPPorts = [ 55522 ];
     };
 
