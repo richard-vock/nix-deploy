@@ -67,7 +67,11 @@ with lib;
         ProtectControlGroups = true;
         SystemCallFilter = "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
         ConfigurationDirectory = "authentik";
-        Environment = [ "PYTHONPATH=${cachetoolsPath}" ];
+        Environment = [
+          "PYTHONPATH=${cachetoolsPath}"
+          "AUTHENTIK_HOST=https://authentik.${domain}/"
+          "AUTHENTIK_LISTEN__HTTP=${cfg.host}:9000"
+        ];
       };
     };
 
@@ -93,7 +97,10 @@ with lib;
         ProtectControlGroups = true;
         SystemCallFilter = "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
         ConfigurationDirectory = "authentik";
-        Environment = [ "PYTHONPATH=${cachetoolsPath}" ];
+        Environment = [
+          "PYTHONPATH=${cachetoolsPath}"
+          "AUTHENTIK_HOST=https://authentik.${domain}/"
+        ];
       };
     };
 
@@ -108,7 +115,7 @@ with lib;
         Environment = [
           "AUTHENTIK_LISTEN__LDAPS=127.0.0.1:6636"
           "AUTHENTIK_LISTEN__LDAP=127.0.0.1:3389"
-          "AUTHENTIK_HOST=https://authentik.damogran.cc/"
+          "AUTHENTIK_HOST=https://authentik.${domain}/"
         ];
         User = "authentik";
         Group = "authentik";
