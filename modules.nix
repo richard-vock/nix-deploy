@@ -2,7 +2,7 @@
   imports = [
     ./settings.nix
     ./modules/postgres.nix
-    # ./modules/haproxy.nix
+    ./modules/reverse-proxy.nix
     ./modules/authentik.nix
   ];
 }
