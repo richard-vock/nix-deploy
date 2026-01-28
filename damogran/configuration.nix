@@ -11,7 +11,7 @@
     # ./services/vaultwarden.nix
     # ./services/tandoor.nix
     ./services/authentik.nix
-    # ./services/netbird.nix
+    ./services/netbird.nix
     # ./services/borgbackup.nix
     ../users.nix
   ];
@@ -52,7 +52,11 @@
     domain = domain;
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 443 55522 ];
+      allowedTCPPorts = [
+        80
+        443
+        55522
+      ];
       allowedUDPPorts = [ 55522 ];
     };
 
