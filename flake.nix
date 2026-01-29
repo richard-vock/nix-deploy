@@ -12,6 +12,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    headscale.url = "github:juanfont/headscale";
   };
 
   outputs =
@@ -20,6 +21,7 @@
       nixpkgs,
       deploy-rs,
       sops-nix,
+      headscale,
       ...
     }:
     let
@@ -32,6 +34,7 @@
           specialArgs = inputs;
           modules = [
             sops-nix.nixosModules.sops
+            headscale.nixosModules.default
             ./modules.nix
             ./${name}/default.nix
             ./${name}/hardware-configuration.nix

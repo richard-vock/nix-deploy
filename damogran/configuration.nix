@@ -11,7 +11,8 @@
     # ./services/vaultwarden.nix
     # ./services/tandoor.nix
     ./services/authentik.nix
-    ./services/netbird.nix
+    ./services/headscale.nix
+    # ./services/netbird.nix
     # ./services/borgbackup.nix
     ../users.nix
   ];
