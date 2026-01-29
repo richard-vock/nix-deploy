@@ -49,7 +49,9 @@ in
     port = listenPort;
   };
 
-  sops.secrets = {
-    "headscale/oidc-client-secret" = { };
+  sops.secrets."headscale/oidc-client-secret" = {
+    owner = "headscale";
+    group = "headscale";
+    mode = "0400";
   };
 }
