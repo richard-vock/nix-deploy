@@ -177,5 +177,13 @@ in
     ];
     requires = [ "authentik-server.service" ];
     wants = [ "authentik-worker.service" ];
+    preStart = lib.mkAfter ''
+      rm -f /var/lib/netbird-mgmt/data/geonames_*.db /var/lib/netbird-mgmt/data/GeoLite2-City_*.mmdb || true
+    '';
+    serviceConfig = {
+      PrivateTmp = lib.mkForce false;
+      RuntimeDirectory = "netbird-mgmt";
+      RuntimeDirectoryMode = "0750";
+    };
   };
 }
