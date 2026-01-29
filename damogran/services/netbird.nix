@@ -117,8 +117,7 @@ in
           #           Password._secret = config.sops.secrets."netbird/turn-secret".path;
           #         }
           #       ];
-          Secret = "foobar";
-          #       Secret._secret = "/run/secrets/turn_secret";
+          Secret._secret = config.sops.secrets."netbird/turn-secret".path;
         };
         Signal.URI = "${netbird_domain}:443";
         #     #     IdpManagerConfig = {
