@@ -148,6 +148,7 @@ in
         #       RedirectURLs = [ "http://localhost:53000" ];
         #     };
         DataStoreEncryptionKey._secret = config.sops.secrets."netbird/datastore-key".path;
+        PprofEnabled = false;
       };
     };
 
