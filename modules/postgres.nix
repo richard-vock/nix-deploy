@@ -43,9 +43,20 @@ with lib;
 
     sops.secrets."postgres/users" = { };
 
-    systemd.services.postgresql.serviceConfig.ExecStartPost = [
-      "+${pkgs.bash}/bin/bash -x ${../scripts/set_postgres_passwords.sh} ${pkgs.sudo}/bin/sudo"
-    ];
+    systemd.services.postgresql-set-passwords = {
+      description = "Set PostgreSQL user passwords";
+      after = [ "postgresql.service" ];
+      requires = [ "postgresql.service" ];
+      wantedBy = [ "postgresql.service" ];
+      partOf = [ "postgresql.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        ${pkgs.bash}/bin/bash -x ${../scripts/set_postgres_passwords.sh} ${pkgs.sudo}/bin/sudo
+      '';
+    };
 
     # TODO: set up backups
 
