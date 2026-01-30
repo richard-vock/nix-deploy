@@ -22,6 +22,8 @@
   ingress.vaultwarden = {
     subdomain = "bitwarden";
     port = 8222;
+    letsencrypt = false;
+    tailscaleOnly = true;
   };
 
   # services.borgbackup.jobs.vaultwarden = import ../../backup.nix domain server "vaultwarden" {
