@@ -10,6 +10,7 @@
     networkmanager.enable = false;
     useDHCP = false;
     useNetworkd = true;
+    fqdn = "damogran.cc";
   };
 
   systemd.network = {
@@ -19,9 +20,16 @@
     networks."40-wired" = {
       matchConfig.Name = "en*";
       networkConfig.DHCP = "yes";
+      extraConfig = ''
+        [DHCP]
+        UseHostname=false
+      '';
       linkConfig.RequiredForOnline = true;
     };
   };
+
+  # force this file to exist, otherwise nixos is sometimes stubborn in setting our hostname
+  environment.etc."hostname".text = "damogran";
 
   # systemd-timesyncd failed beacuse it didn't wait for network
   systemd.services.systemd-timesyncd.after = [ "network-online.target" ];
