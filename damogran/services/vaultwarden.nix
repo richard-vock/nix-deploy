@@ -19,10 +19,10 @@
     };
   };
 
-  # ingress.vaultwarden = {
-  #   subdomain = "bitwarden";
-  #   port = 8222;
-  # };
+  ingress.vaultwarden = {
+    subdomain = "bitwarden";
+    port = 8222;
+  };
 
   # services.borgbackup.jobs.vaultwarden = import ../../backup.nix domain server "vaultwarden" {
   #   paths = [ "/var/backup/vaultwarden" ];
