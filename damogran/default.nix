@@ -6,6 +6,7 @@
     ./services/authentik.nix
     ./services/headscale.nix
     ./services/tailscale.nix
+    ./services/vaultwarden.nix
     # ./services/borgbackup.nix
     ../users.nix
   ];
