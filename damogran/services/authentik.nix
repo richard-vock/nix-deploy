@@ -1,11 +1,4 @@
 {
-  pkgs,
-  lib,
-  domain,
-  config,
-  ...
-}:
-{
   services.authentik = {
     enable = true;
     outposts.ldap.enable = false;
