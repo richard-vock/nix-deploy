@@ -22,7 +22,6 @@
   ingress.vaultwarden = {
     subdomain = "bitwarden";
     port = 8222;
-    letsencrypt = false;
     tailscaleOnly = true;
   };
 

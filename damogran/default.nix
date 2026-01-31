@@ -1,4 +1,9 @@
-{ domain, pkgs, ... }:
+{
+  config,
+  domain,
+  pkgs,
+  ...
+}:
 {
   imports = [
     # ./services/vaultwarden.nix

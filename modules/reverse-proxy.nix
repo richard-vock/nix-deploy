@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   domain,
   email,
   ...
@@ -12,10 +13,8 @@ let
   mkVirtualHost =
     name: ingress:
     let
-      hostName =
-        if ingress.host != null then ingress.host else "${ingress.subdomain}.${domain}";
+      hostName = if ingress.host != null then ingress.host else "${ingress.subdomain}.${domain}";
       upstream = "http://${ingress.address}:${builtins.toString ingress.port}";
-      tlsEnabled = ingress.letsencrypt || ingress.sslCertificate != null;
       tailscaleRestriction = lib.optionalString ingress.tailscaleOnly ''
         allow 100.64.0.0/10;
         allow fd7a:115c:a1e0::/48;
@@ -24,27 +23,17 @@ let
     in
     {
       name = hostName;
-      value =
-        let
-          manualTlsAttrs = lib.optionalAttrs (ingress.sslCertificate != null) {
-            sslCertificate = ingress.sslCertificate;
-            sslCertificateKey = ingress.sslCertificateKey;
-          };
-        in
-        {
-          enableACME = ingress.letsencrypt;
-          forceSSL = tlsEnabled;
-          addSSL = tlsEnabled;
-          extraConfig = lib.mkIf (tailscaleRestriction != "") tailscaleRestriction;
-          locations."/" = {
-            proxyPass = upstream;
-            proxyWebsockets = true;
-          };
-        }
-        // manualTlsAttrs;
+      value = {
+        forceSSL = true;
+        extraConfig = lib.mkIf (tailscaleRestriction != "") tailscaleRestriction;
+        locations."/" = {
+          proxyPass = upstream;
+          proxyWebsockets = true;
+        };
+        sslCertificate = "/var/lib/acme/${hostName}/fullchain.pem";
+        sslCertificateKey = "/var/lib/acme/${hostName}/key.pem";
+      };
     };
-
-  needsAcme = lib.any (ingress: ingress.letsencrypt) (lib.attrValues ingresses);
 in
 with lib;
 {
@@ -69,18 +58,6 @@ with lib;
               type = types.bool;
               default = true;
               description = "Request and use a Let's Encrypt certificate for this subdomain.";
-            };
-
-            sslCertificate = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Path to an existing TLS certificate to use instead of Let's Encrypt.";
-            };
-
-            sslCertificateKey = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "Path to the private key that matches sslCertificate.";
             };
 
             address = mkOption {
@@ -111,16 +88,6 @@ with lib;
 
   config = mkMerge [
     {
-      assertions = mapAttrsToList (
-        name: ingress:
-        {
-          assertion = (ingress.sslCertificate == null) == (ingress.sslCertificateKey == null);
-          message = "Ingress " + name + " must set both sslCertificate and sslCertificateKey or neither.";
-        }
-      ) ingresses;
-    }
-
-    {
       services.nginx = {
         enable = true;
         recommendedProxySettings = true;
@@ -130,12 +97,46 @@ with lib;
       };
     }
 
-    (mkIf needsAcme {
+    {
+      # allow lego to configure acme by writing hetzner DNS entries
       security.acme = {
         acceptTerms = true;
-        defaults.email = email;
+        defaults = {
+          email = "root@damogran.cc";
+          dnsProvider = "cloudflare";
+          environmentFile = config.sops.secrets."cloudflare/dns-api-token-env".path;
+          dnsPropagationCheck = true;
+        };
+        certs = builtins.listToAttrs (
+          mapAttrsToList (
+            name: ingress:
+            let
+              hostName = if ingress.host != null then ingress.host else "${ingress.subdomain}.${domain}";
+            in
+            {
+              name = hostName;
+              value = {
+                group = "nginx";
+              };
+            }
+          ) ingresses
+        );
       };
-    })
+      sops.secrets."cloudflare/dns-api-token-env" = { };
+    }
 
+    {
+      services.headscale.settings.dns.extra_records = mapAttrsToList (
+        name: ingress:
+        let
+          hostName = if ingress.host != null then ingress.host else "${ingress.subdomain}.${domain}";
+        in
+        {
+          name = hostName;
+          type = "A";
+          value = "100.64.0.1";
+        }
+      ) (filterAttrs (name: ingress: ingress.tailscaleOnly) ingresses);
+    }
   ];
 }
